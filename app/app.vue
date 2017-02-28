@@ -9,9 +9,7 @@
         </div>
       </div>
       <div class="grid__item grid__item--main">
-        <!-- <p :class="profile.username">HELLO</p> -->
-        <repo-card v-bind:repo="{name: 'Spoon-Knife'}"></repo-card>
-        <repo-card v-bind:repo="{name: 'Hello-World'}"></repo-card>
+        <repo-card v-for="current in repositories" v-bind:repo="current"></repo-card>
       </div>
     </div>
   </div>
@@ -25,11 +23,27 @@ export default {
     RepoCard,
   },
 
+  // This method will run every time a new instance of this component is CREATED
+  // This is run AFTER `data`
+  created() {
+    fetch('http://api.github.com/users/octocat/repos')
+      .then(response => response.json())
+      .then((repos) => {
+        this.repositories = repos;
+      });
+  },
+
   data() {
     return {
       profile: {
         username: 'MurrayFan85'
       },
+
+      repositories: [
+        { name: 'Spoon-Thing' },
+        { name: 'A New Thing' },
+        { name: 'Hello-World' }
+      ],
     };
   },
 
